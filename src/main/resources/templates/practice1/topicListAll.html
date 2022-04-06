@@ -21,7 +21,7 @@
 					</div>
 					<div class="page_title">관리자검색</div>
 					
-					<form name="###########" action="############" method="get" >
+					<form name="topicListAll" action="topicListAll" method="get" >
 					<div class="search_block flfull">
 
 						<div class="fl">
@@ -46,7 +46,7 @@
 
 						<div class="fr">
 							<div class="search_btn_area">
-								<a href="#" class="normal_btn purplebtn">검색</a>
+								<a href="#" class="normal_btn purplebtn" id="searchBtn">검색</a>
 								<a href="#" class="normal_btn purplebtn02">등록</a>
 							</div>
 						</div>
@@ -75,44 +75,144 @@
 												<th>등록일</th>
 											</tr>
 												
-											<tr>
-												<td>1</td>
-												<td>admin</td>
-												<td>오늘은 해가뜨려나?</td>
+											<tr th:each="vo, state: ${list}">
+												<td>[[${state.index + 1}]]</td>
+												<td>[[${vo.topic_id}]]</td>
+												<td>[[${vo.topic_title}]]</td>
 												<td>
-													<a title="상세보기(클릭)" href="#">오늘은 비가오려나?</a>
+													<a title="상세보기(클릭)" th:href="@{/topicDetail(topic_name=${vo.topic_name})}">
+													[[${vo.topic_content}]]
+													</a>
 												</td>
-												<td>2016-01-01</td>
+												<td>[[${vo.topic_date}]]</td>
 											</tr>
 
-                                            <tr>
-												<td>1</td>
-												<td>coding404</td>
-												<td>안녕하세요!</td>
-												<td>
-													<a title="상세보기(클릭)" href="#">오늘은 해가뜬데요.</a>
-												</td>
-												<td>2016-01-01</td>
-											</tr>
+                                     
 										</table>
 
-
+										<!-- 
 										<div class="page">
 											<ul>
-												<li><a href="#"><i class="fa fa-angle-double-left"
-															aria-hidden="true"></i></a></li>
-												<li style="margin-right:5px;"><a href="#"><i class="fa fa-angle-left"
-															aria-hidden="true"></i></a></li>
-												<li class="on"><a href="#">1</a></li>
-												<li><a href="#">2</a></li>
-												<li><a href="#">3</a></li>
-												<li><a href="#">4</a></li>
-												<li><a href="#">5</a></li>
-												<li style="margin-left:5px;"><a href="#"><i class="fa fa-angle-right"
-															aria-hidden="true"></i></a></li>
-												<li><a href="#"><i class="fa fa-angle-double-right"
-															aria-hidden="true"></i></a></li>
+												<th:block th:if="${pageVO.realEnd != 0}">
+												<li><a th:href="@{/practice1/topicListAll(page=1, amount=${pageVO.amount})}">
+														<i class="fa fa-angle-double-left" aria-hidden="true"></i>
+													</a>
+												</li>
+												</th:block>
+												
+												<th:block th:if="${pageVO.prev}">
+												<li style="margin-right:5px;">
+													<a href="@{/practice1/topicListAll(page=${PageVO.start - 1), amount=${pageVO.amount}}">
+														<i class="fa fa-angle-left" aria-hidden="true"></i>
+													</a>
+												</li>
+												</th:block>
+															
+												<th:block th:if="page : ${pageVO.List}">
+												<li th:class="${pageVO.page == page ? 'on' : '' }">
+													<a href="@{/practice1/topicListALl(page=${page}, amount=${pageVO.amount})}">[[${page}]]</a>
+												</li>
+												</th:block>
+												
+												<th:block th:if="${pageVO.next}">
+												<li style="margin-left:5px;">
+													<a th:href="@{/practice1/topicListAll(page=${pageVO.end + 1}, amount=${pageVO.amount})}">
+														<i class="fa fa-angle-right" aria-hidden="true"></i>
+													</a>
+												</li>
+												</th:block>
+												
+												<th:block th:if="${pageVO.realEnd != 0}">
+												<li>
+													<a th:href="@{practice1/topicListAll(page=${pageVO.realEnd}, amount=${pageVO.amount})}">
+														<i class="fa fa-angle-double-right" aria-hidden="true"></i>
+													</a>
+												</li>
+												</th:block>
 											</ul>
+										</div>
+										-->
+										
+										<!-- 
+										<div class="page">
+											<ul>
+												<th:block th:if="${pageVO.realEnd != 0}">
+												<li><a th:href="@{/practice1/topicListAll(page=1,
+																					   amount=${pageVO.amount},
+																					   searchName=${pageVO.cri.searchName},
+																					   searchContent=${pageVO.cri.searchContent},
+																					   searchPrice=${pageVO.cri.searchPrice},
+																					   startDate=${pageVO.cri.startDate},
+																					   endDate=${pageVO.cri.endDate}
+																					   ) }">
+														<i class="fa-fa-angle-double-left" aria-hidden="true"></i>
+													</a>
+												</li>
+												</th:block>
+												
+												<th:block th:if="${pageVO.prev}">
+												<li style="margin-right:5px;">
+													<a th:href="@{/practice1/topicListAll(page=${pageVO.start - 1},
+																					   amount=${pageVO.amount},
+																					   searchName=${pageVO.cri.searchName},
+																					   searchContent=${pageVO.cri.searchContent},
+																					   searchPrice=${pageVO.cri.searchPrice},
+																					   startDate=${pageVO.cri.startDate},
+																					   endDate=${pageVO.cri.endDate}
+																					   ) }">
+														<i class="fa-fa-angle-left" aria-hidden="true"></i>
+													</a>
+												</li>
+												</th:block>
+												
+												<th:block th:each="page : ${pageVO.pageList}"> 
+												<li th:class="${pageVO.page == page ? 'on' : '' }">
+													<a th:href="@{/practice1/topicListAll(page=${page},
+																					   amount=${pageVO.amount},
+																					   searchName=${pageVO.cri.searchName},
+																					   searchContent=${pageVO.cri.searchContent},
+																					   searchPrice=${pageVO.cri.searchPrice},
+																					   startDate=${pageVO.cri.startDate},
+																					   endDate=${pageVO.cri.endDate}
+																					   ) }">[[${page}]]</a>
+												</li>
+												</th:block>
+												
+												<th:block th:if="${pageVO.next}">
+												<li style="margin-left:5px;">
+													<a th:href="@{/practice1/topicListAll(page=${pageVO.end + 1},
+																					   amount=${pageVO.amount},
+																					   searchName=${pageVO.cri.searchName},
+																					   searchContent=${pageVO.cri.searchContent},
+																					   searchPrice=${pageVO.cri.searchPrice},
+																					   startDate=${pageVO.cri.startDate},
+																					   endDate=${pageVO.cri.endDate}
+																					   ) }">
+														<i class="fa-fa-angle-right" aria-hidden="true"></i>
+													</a>
+												</li>
+												</th:block>
+												
+												<th:block th:if="${pageVO.realEnd != 0}">
+												<li>
+													<a th:href="@{/practice1/topicListAll(page=${pageVO.realEnd},
+																					   amount=${pageVO.amount},
+																					   searchName=${pageVO.cri.searchName},
+																					   searchContent=${pageVO.cri.searchContent},
+																					   searchPrice=${pageVO.cri.searchPrice},
+																					   startDate=${pageVO.cri.startDate},
+																					   endDate=${pageVO.cri.endDate}
+																					   ) }">
+														<i class="fa-fa-angle-double-right" aria-hidden="true"></i>
+													</a>
+												</li>
+												</th:block>
+											</ul>
+										</div>
+ 										-->										
+										
+										<div class="page">
+											<th:block th:replace="~{/include/page :: page('/practice1/topicListAll', ${pageVO} )}"></th:block>
 										</div>
 									</li>
 
@@ -120,6 +220,8 @@
 							</li>
 						</ul>
 					</div>
+					
+					
 					</form>
 
 				</div>
@@ -192,4 +294,36 @@
 	</div><!-- end wrap -->
 	
 	</th:block>
+	
+	<!-- 페이지에서 사용할 JS코드를 block아래에 삽입 -->
+	<script th:inline="javascript">
+		//메시지 출력문
+		(function() {
+			var msg = JSON.parse('[[${msg}]]');
+			if(msg != null) {
+			alert(msg);	
+			}	
+		})();
+		
+		//데이터 개수 변경 JS
+		function prod_dataHandler(a) {
+			//a는 select태그, a.value는 태그의 값
+			//console.log(a.value); //window
+			
+			location.href='/practice1/topicListAll?page=1&amount=' + a.value;
+			
+		}
+		
+		//검색버튼
+		var searchBtn = document.getElementById("searchBtn");
+		searchBtn.onclick = function() {
+			
+			event.preventDefault(); //a의 기본이벤트 중지
+			document.topicListAll.submit(); //폼전송
+			
+		}
+		
+		
+	</script>
+	
 </html>

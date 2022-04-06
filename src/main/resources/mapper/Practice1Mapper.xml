@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coding404.myweb.practice1.Practice1Mapper">
+	
+	<insert id="regist">
+		insert into PRACTICE1(topic_name,
+							  topic_id,
+							  topic_date,
+							  topic_title,
+							  topic_content)
+		values (
+				#{topic_name},
+				#{topic_id},
+				#{topic_date},
+				#{topic_title},
+				#{topic_content}
+				)
+	</insert>
+	
+	<select id="getListMe" resultType="Practice1VO">
+		
+		<![CDATA[
+		SELECT *
+		FROM (SELECT A.*,
+					 @ROWNUM := @ROWNUM + 1 AS RN
+				FROM ( SELECT *
+						 FROM PRACTICE1
+						 WHERE TOPIC_ID = 'admin'
+						 ORDER BY TOPIC_NAME DESC) A, (SELECT @ROWNUM := 0) D 
+				]]>
+				<if test="searchTitle != '' and searchTitle != null">
+				AND TOPIC_TITLE LIKE CONCAT('%', #{searchTitle}, '%')
+				</if> 		
+				<if test="searchContent != '' and searchContent != null">
+				AND TOPIC_TITLE LIKE CONCAT('%', #{searchContent}, '%')
+				</if> 
+				
+			<![CDATA[
+			) B
+			WHERE RN > (#{page}-1) * #{amount} AND RN <= #{page} * #{amount}
+			]]>
+		  
+	</select>
+	
+	<select id="getListAll" resultType="Practice1VO">
+		
+				<![CDATA[
+		SELECT *
+		FROM (SELECT A.*,
+					 @ROWNUM := @ROWNUM + 1 AS RN
+				FROM ( SELECT *
+						 FROM PRACTICE1
+						 WHERE TOPIC_ID = 'admin'
+						 ORDER BY 
+						 TOPIC_NAME DESC) A, (SELECT @ROWNUM := 0) D 
+				]]>
+				<if test="searchTitle != '' and searchTitle != null">
+				AND TOPIC_TITLE LIKE CONCAT('%', #{searchTitle}, '%')
+				</if> 		
+				<if test="searchContent != '' and searchContent != null">
+				AND TOPIC_TITLE LIKE CONCAT('%', #{searchContent}, '%')
+				</if> 
+			<![CDATA[
+			) B
+			WHERE RN > (#{page}-1) * #{amount} AND RN <= #{page} * #{amount}
+			]]>
+		  
+	</select>
+	
+	
+	<select id="getTotal" resultType="int">
+		select count(*) as total from practice1 where TOPIC_ID = 'admin'
+	</select>
+	
+	<select id="getDetail" resultType="Practice1VO">
+		select * from PRACTICE1
+		where topic_name = #{topic_name}
+	</select>
+	
+	<update id="update">
+		update PRACTICE1
+		set topic_title = #{topic_title},
+			topic_content = #{topic_content}
+		where topic_name = #{topic_name}
+	</update>
+	
+	<delete id="delete">
+		delete from PRACTICE1
+		where topic_name = #{topic_name}
+	</delete>
+
+</mapper>

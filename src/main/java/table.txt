@@ -12,3 +12,48 @@ PROD_PURCHASE_YN CHAR(1) DEFAULT 'N' CHECK (PROD_PURCHASE_YN IN ('Y', 'N')), ##�
 PROD_CONTENT VARCHAR(5000), ##내용
 PROD_COMMENT VARCHAR(5000) ##메모
 );
+
+CREATE TABLE PRACTICE1(
+TOPIC_NAME INT PRIMARY KEY AUTO_INCREMENT, 
+TOPIC_ID VARCHAR(30), ## FK
+TOPIC_REGDATE TIMESTAMP DEFAULT NOW(),
+TOPIC_DATE VARCHAR(20),  ## 등록일
+TOPIC_TITLE VARCHAR(20), ## 제목
+TOPIC_CONTENT VARCHAR(5000) ## 내용
+);
+
+##
+# SELECT * FROM PRODUCT WHERE PROD_WRITER = 'admin' limit 11, 20;
+
+#MySQL은 서브쿼리절에 테이블 엘리어스가 필요
+SELECT A.*,
+	   @ROWNUM := @ROWNUM + 1 AS RN #ROWNUM변수 + 1로 RN으로 사용
+FROM ( SELECT *
+	   FROM PRODUCT
+	   WHERE PROD_WRITER = 'admin'
+	   ORDER BY PROD_ID DESC) A, (SELECT @ROWNUM := 0) D; #ROWNUM변수 초기화
+
+SELECT * 
+FROM (SELECT A.*,
+	   @ROWNUM := @ROWNUM + 1 AS RN #ROWNUM변수 + 1로 RN으로 사용
+		 FROM ( SELECT *
+				  FROM PRODUCT
+				  WHERE PROD_WRITER = 'admin'
+				  ORDER BY PROD_ID DESC) A, (SELECT @ROWNUM := 0) D #ROWNUM변수 초기화
+) B
+WHERE RN > 10 AND RN <= 20;
+
+SELECT * 
+FROM (SELECT A.*,
+			 @ROWNUM := @ROWNUM + 1 AS RN #ROWNUM변수 + 1로 RN으로 사용
+		 FROM ( SELECT *
+				  FROM PRODUCT 
+				  WHERE PROD_WRITER = 'admin'
+                  AND DATE_FORMAT(PROD_ENDDATE, '%Y-%m-%d') > DATE_FORMAT('2021-01-01', '%Y-%m-%d')
+                  AND DATE_FORMAT(PROD_ENDDATE, '%Y-%m-%d') <=  DATE_FORMAT('2021-12-01', '%Y-%m-%d')
+                  AND PROD_NAME LIKE CONCAT('%', '9', '%')
+				  AND PROD_CONTENT LIKE CONCAT('%', 'TEST', '%')
+                  
+				  ORDER BY PROD_PRICE ASC, PROD_ID DESC) A, (SELECT @ROWNUM := 0) D #ROWNUM변수 초기화
+) B
+WHERE RN > 0 AND RN <= 10;

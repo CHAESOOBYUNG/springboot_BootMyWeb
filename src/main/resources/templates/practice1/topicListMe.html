@@ -17,7 +17,7 @@
 						</div>
 					</div>
 
-					<form name="###########" action="############" method="get" >
+					<form name="topicListMe" action="topicListMe" method="get" >
 
 					<div class="full_collum collum">
 						<ul>
@@ -43,30 +43,15 @@
 												<th>수정/삭제</th>
 											</tr>
 												
-											<tr>
-												<td>1</td>
-												<td>admin</td>
-												<td>오늘은 해가뜨려나?</td>
+											<tr th:each="vo, state : ${list}">
+												<td>[[${state.index + 1}]]</td>
+												<td>[[${vo.topic_id}]]</td>
+												<td>[[${vo.topic_title}]]</td>
 												<td>
-													오늘은 비가오려나?
+													[[${vo.topic_content}]]
 												</td>
 												<td>2016-01-01</td>
 												<td>
-                                                    <a href="#">수정</a>
-                                                    /
-                                                    <a href="#">삭제</a>
-                                                </td>
-											</tr>
-
-											<tr>
-												<td>1</td>
-												<td>admin</td>
-												<td>세상에서 가장 가난한 임금은?</td>
-												<td>
-													최저임금
-												</td>
-												<td>2016-01-01</td>
-                                                <td>
                                                     <a href="#">수정</a>
                                                     /
                                                     <a href="#">삭제</a>
@@ -76,22 +61,129 @@
 										</table>
 
 
+										<!-- 
 										<div class="page">
 											<ul>
-												<li><a href="#"><i class="fa fa-angle-double-left"
-															aria-hidden="true"></i></a></li>
-												<li style="margin-right:5px;"><a href="#"><i class="fa fa-angle-left"
-															aria-hidden="true"></i></a></li>
-												<li class="on"><a href="#">1</a></li>
-												<li><a href="#">2</a></li>
-												<li><a href="#">3</a></li>
-												<li><a href="#">4</a></li>
-												<li><a href="#">5</a></li>
-												<li style="margin-left:5px;"><a href="#"><i class="fa fa-angle-right"
-															aria-hidden="true"></i></a></li>
-												<li><a href="#"><i class="fa fa-angle-double-right"
-															aria-hidden="true"></i></a></li>
+												<th:block th:if="${pageVO.realEnd != 0}">
+												<li><a th:href="@{/practice1/topicListMe(page=1, amount=${pageVO.amount})}">
+														<i class="fa fa-angle-double-left" aria-hidden="true"></i>
+													</a>
+												</li>
+												</th:block>
+												
+												<th:block th:if="${pageVO.prev}">
+												<li style="margin-right:5px;">
+													<a href="@{/practice1/topicListMe(page=${PageVO.start - 1), amount=${pageVO.amount}}">
+														<i class="fa fa-angle-left" aria-hidden="true"></i>
+													</a>
+												</li>
+												</th:block>
+															
+												<th:block th:if="page : ${pageVO.List}">
+												<li th:class="${pageVO.page == page ? 'on' : '' }">
+													<a href="@{/practice1/topicListMe(page=${page}, amount=${pageVO.amount})}">[[${page}]]</a>
+												</li>
+												</th:block>
+												
+												<th:block th:if="${pageVO.next}">
+												<li style="margin-left:5px;">
+													<a th:href="@{/practice1/topicListMe(page=${pageVO.end + 1}, amount=${pageVO.amount})}">
+														<i class="fa fa-angle-right" aria-hidden="true"></i>
+													</a>
+												</li>
+												</th:block>
+												
+												<th:block th:if="${pageVO.realEnd != 0}">
+												<li>
+													<a th:href="@{practice1/topicListMe(page=${pageVO.realEnd}, amount=${pageVO.amount})}">
+														<i class="fa fa-angle-double-right" aria-hidden="true"></i>
+													</a>
+												</li>
+												</th:block>
 											</ul>
+										</div>
+										-->
+										<!--  
+										<div class="page">
+											<ul>
+												<th:block th:if="${pageVO.realEnd != 0}">
+												<li><a th:href="@{/practice1/topicListMe(page=1,
+																					   amount=${pageVO.amount},
+																					   searchName=${pageVO.cri.searchName},
+																					   searchContent=${pageVO.cri.searchContent},
+																					   searchPrice=${pageVO.cri.searchPrice},
+																					   startDate=${pageVO.cri.startDate},
+																					   endDate=${pageVO.cri.endDate}
+																					   ) }">
+														<i class="fa-fa-angle-double-left" aria-hidden="true"></i>
+													</a>
+												</li>
+												</th:block>
+												
+												<th:block th:if="${pageVO.prev}">
+												<li style="margin-right:5px;">
+													<a th:href="@{/practice1/topicListMe(page=${pageVO.start - 1},
+																					   amount=${pageVO.amount},
+																					   searchName=${pageVO.cri.searchName},
+																					   searchContent=${pageVO.cri.searchContent},
+																					   searchPrice=${pageVO.cri.searchPrice},
+																					   startDate=${pageVO.cri.startDate},
+																					   endDate=${pageVO.cri.endDate}
+																					   ) }">
+														<i class="fa-fa-angle-left" aria-hidden="true"></i>
+													</a>
+												</li>
+												</th:block>
+												
+												<th:block th:each="page : ${pageVO.pageList}"> 
+												<li th:class="${pageVO.page == page ? 'on' : '' }">
+													<a th:href="@{/practice1/topicListMe(page=${page},
+																					   amount=${pageVO.amount},
+																					   searchName=${pageVO.cri.searchName},
+																					   searchContent=${pageVO.cri.searchContent},
+																					   searchPrice=${pageVO.cri.searchPrice},
+																					   startDate=${pageVO.cri.startDate},
+																					   endDate=${pageVO.cri.endDate}
+																					   ) }">[[${page}]]</a>
+												</li>
+												</th:block>
+												
+												<th:block th:if="${pageVO.next}">
+												<li style="margin-left:5px;">
+													<a th:href="@{/practice1/topicListMe(page=${pageVO.end + 1},
+																					   amount=${pageVO.amount},
+																					   searchName=${pageVO.cri.searchName},
+																					   searchContent=${pageVO.cri.searchContent},
+																					   searchPrice=${pageVO.cri.searchPrice},
+																					   startDate=${pageVO.cri.startDate},
+																					   endDate=${pageVO.cri.endDate}
+																					   ) }">
+														<i class="fa-fa-angle-right" aria-hidden="true"></i>
+													</a>
+												</li>
+												</th:block>
+												
+												<th:block th:if="${pageVO.realEnd != 0}">
+												<li>
+													<a th:href="@{/practice1/topicListMe(page=${pageVO.realEnd},
+																					   amount=${pageVO.amount},
+																					   searchName=${pageVO.cri.searchName},
+																					   searchContent=${pageVO.cri.searchContent},
+																					   searchPrice=${pageVO.cri.searchPrice},
+																					   startDate=${pageVO.cri.startDate},
+																					   endDate=${pageVO.cri.endDate}
+																					   ) }">
+														<i class="fa-fa-angle-double-right" aria-hidden="true"></i>
+													</a>
+												</li>
+												</th:block>
+											</ul>
+											
+										</div>
+										-->
+										
+										<div class="page">
+											<th:block th:replace="~{/include/page :: page('/practice1/topicListMe', ${pageVO} )}"></th:block>
 										</div>
 									</li>
 
@@ -171,4 +263,14 @@
 	</div><!-- end wrap -->
 
 	</th:block>
+	
+	<!-- 페이지에서 사용할 JS코드를 block아래에 삽입 -->
+	<script th:inline="javascript">
+	
+		
+		
+		
+		
+		
+	</script>
 </html>
