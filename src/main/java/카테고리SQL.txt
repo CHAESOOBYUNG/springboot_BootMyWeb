@@ -1,4 +1,4 @@
-SELECT @@autocommit;
+SELECT @autocommit;
 SET AUTOCOMMIT = 0; #해제
 
 CREATE TABLE PRODUCT_CATEGORY(

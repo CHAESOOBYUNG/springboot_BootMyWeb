@@ -39,6 +39,7 @@ public class ProductVO {
 	private String prod_enddate; 
 	
 	private String prod_category;
+	private String category_nav; //조인된 결과의 값을 받을 변수
 	
 	@NotBlank(message = "작성자는 필수사항입니다")
 	private String prod_writer;
